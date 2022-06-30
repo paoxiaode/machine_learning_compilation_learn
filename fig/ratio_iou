@@ -1,0 +1,70 @@
+digraph {
+	graph [labelloc=t]
+	"x1.1" [label=x1 color=blue]
+	"y1.1" [label=y1 color=blue]
+	"w1.1" [label=w1 color=blue]
+	"h1.1" [label=h1 color=blue]
+	"x2.1" [label=x2 color=blue]
+	"y2.1" [label=y2 color=blue]
+	"w2.1" [label=w2 color=blue]
+	"h2.1" [label=h2 color=blue]
+	"xi.1" [label=max shape=box style=rounded]
+	"x1.1" -> "xi.1"
+	"x2.1" -> "xi.1"
+	"yi.1" [label=max shape=box style=rounded]
+	"y1.1" -> "yi.1"
+	"y2.1" -> "yi.1"
+	17 [label=add shape=box style=rounded]
+	"x1.1" -> 17
+	"w1.1" -> 17
+	21 [label=add shape=box style=rounded]
+	"x2.1" -> 21
+	"w2.1" -> 21
+	22 [label=min shape=box style=rounded]
+	17 -> 22
+	21 -> 22
+	25 [label=sub shape=box style=rounded]
+	22 -> 25
+	"xi.1" -> 25
+	"wi.1" [label=clamp shape=box style=rounded]
+	25 -> "wi.1"
+	32 [label=add shape=box style=rounded]
+	"y1.1" -> 32
+	"h1.1" -> 32
+	36 [label=add shape=box style=rounded]
+	"y2.1" -> 36
+	"h2.1" -> 36
+	37 [label=min shape=box style=rounded]
+	32 -> 37
+	36 -> 37
+	40 [label=sub shape=box style=rounded]
+	37 -> 40
+	"yi.1" -> 40
+	"hi.1" [label=clamp shape=box style=rounded]
+	40 -> "hi.1"
+	"area_i.1" [label=mul shape=box style=rounded]
+	"wi.1" -> "area_i.1"
+	"hi.1" -> "area_i.1"
+	48 [label=mul shape=box style=rounded]
+	"w1.1" -> 48
+	"h1.1" -> 48
+	51 [label=mul shape=box style=rounded]
+	"w2.1" -> 51
+	"h2.1" -> 51
+	53 [label=add shape=box style=rounded]
+	48 -> 53
+	51 -> 53
+	56 [label=mul shape=box style=rounded]
+	"wi.1" -> 56
+	"hi.1" -> 56
+	"area_u.1" [label=sub shape=box style=rounded]
+	53 -> "area_u.1"
+	56 -> "area_u.1"
+	63 [label=clamp shape=box style=rounded]
+	"area_u.1" -> 63
+	64 [label=div shape=box style=rounded]
+	"area_i.1" -> 64
+	63 -> 64
+	".outputs" [label=outputs color=blue]
+	64 -> ".outputs"
+}

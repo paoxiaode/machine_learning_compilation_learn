@@ -1,0 +1,84 @@
+the device is NVIDIA A100 80GB PCIe
+graph(%x : Float(3, strides=[1], requires_grad=0, device=cpu),
+      %y : Float(3, strides=[1], requires_grad=0, device=cpu)):
+  %2 : Long(requires_grad=0, device=cpu) = prim::Constant[value={2}]() # /home/scratch.jiahuil_gpu/DL_learn/torchScript/Code/example_JIT.py:20:0
+  %3 : Float(3, strides=[1], requires_grad=0, device=cpu) = aten::mul(%x, %2) # /home/scratch.jiahuil_gpu/DL_learn/torchScript/Code/example_JIT.py:20:0
+  %4 : int = prim::Constant[value=1]() # /home/scratch.jiahuil_gpu/DL_learn/torchScript/Code/example_JIT.py:20:0
+  %5 : Float(3, strides=[1], requires_grad=0, device=cpu) = aten::add(%3, %y, %4) # /home/scratch.jiahuil_gpu/DL_learn/torchScript/Code/example_JIT.py:20:0
+  return (%5)
+
+def foo(x: Tensor,
+    y: Tensor) -> Tensor:
+  _0 = torch.add(torch.mul(x, CONSTANTS.c0), y)
+  return _0
+
+graph(%x : Float(3, strides=[1], requires_grad=0, device=cpu)):
+  %1 : Float(3, strides=[1], requires_grad=0, device=cpu) = aten::mul(%x, %x) # /home/scratch.jiahuil_gpu/DL_learn/torchScript/Code/example_JIT.py:16:0
+  return (%1)
+
+def fn(x: Tensor) -> Tensor:
+  return torch.mul(x, x)
+
+tensor([[-0.4408],
+        [-0.4461],
+        [-0.4283],
+        [-0.4438],
+        [-0.4402],
+        [-0.4423],
+        [-0.4448],
+        [-0.4579]], grad_fn=<AddmmBackward0>)
+-------------tracing---------------
+Sequential(
+  (0): Linear(in_features=1, out_features=10, bias=True)
+  (1): ReLU()
+  (2): Linear(in_features=10, out_features=1, bias=True)
+)
+Sequential(
+  original_name=Sequential
+  (0): Linear(original_name=Linear)
+  (1): ReLU(original_name=ReLU)
+  (2): Linear(original_name=Linear)
+)
+graph(%self.1 : __torch__.torch.nn.modules.container.Sequential,
+      %input.1 : Float(8, 1, strides=[1, 1], requires_grad=0, device=cpu)):
+  %_2 : __torch__.torch.nn.modules.linear.___torch_mangle_2.Linear = prim::GetAttr[name="2"](%self.1)
+  %_1 : __torch__.torch.nn.modules.activation.ReLU = prim::GetAttr[name="1"](%self.1)
+  %_0 : __torch__.torch.nn.modules.linear.Linear = prim::GetAttr[name="0"](%self.1)
+  %33 : Tensor = prim::CallMethod[name="forward"](%_0, %input.1)
+  %34 : Tensor = prim::CallMethod[name="forward"](%_1, %33)
+  %35 : Tensor = prim::CallMethod[name="forward"](%_2, %34)
+  return (%35)
+
+def forward(self,
+    input: Tensor) -> Tensor:
+  _2 = getattr(self, "2")
+  _1 = getattr(self, "1")
+  _0 = getattr(self, "0")
+  _3 = (_2).forward((_1).forward((_0).forward(input, ), ), )
+  return _3
+
+-------------script---------------
+def forward(self,
+    input: Tensor) -> Tensor:
+  _0 = getattr(self, "0")
+  _1 = getattr(self, "1")
+  _2 = getattr(self, "2")
+  input0 = (_0).forward(input, )
+  input1 = (_1).forward(input0, )
+  return (_2).forward(input1, )
+
+graph(%x.1 : Tensor):
+  %5 : bool = prim::Constant[value=1]() # /home/scratch.jiahuil_gpu/DL_learn/torchScript/Code/example_JIT.py:15:4
+  %2 : int = aten::dim(%x.1) # /home/scratch.jiahuil_gpu/DL_learn/torchScript/Code/example_JIT.py:15:19
+  %x : Tensor = prim::Loop(%2, %5, %x.1) # /home/scratch.jiahuil_gpu/DL_learn/torchScript/Code/example_JIT.py:15:4
+    block0(%6 : int, %x.15 : Tensor):
+      %x.9 : Tensor = aten::mul(%x.15, %x.15) # /home/scratch.jiahuil_gpu/DL_learn/torchScript/Code/example_JIT.py:16:12
+      -> (%5, %x.9)
+  return (%x)
+
+def fn(x: Tensor) -> Tensor:
+  x0 = x
+  for _0 in range(torch.dim(x)):
+    x0 = torch.mul(x0, x0)
+  return x0
+

@@ -1,0 +1,5 @@
+{
+    "python.defaultInterpreterPath": "/home/scratch.jiahuil_gpu/anaconda3/bin/python",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs":"active",
+}
