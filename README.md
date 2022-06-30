@@ -2,58 +2,35 @@
 
 TorchScript is a language implemented by the PyTorch JIT ("Just in Time compiler")
 
-Reference：
+## Reference
+
+web:
 
 [Lernapparat - Machine Learning](https://lernapparat.de/jit-optimization-intro/)
+[Introduction to TorchScript — PyTorch Tutorials 1.11.0+cu102 documentation](https://pytorch.org/tutorials/beginner/Intro_to_TorchScript_tutorial.html)
 
-## Difference between TorchScript and Python
+[PyTorch JIT and TorchScript. A path to production for PyTorch models](https://towardsdatascience.com/pytorch-jit-and-torchscript-c2a77bac0fff)
 
-**Typed vs non-typed**
+[PyTorch Eager mode and Script mode_Chris_zhangrx的博客](https://cxymm.net/article/Chris_zhangrx/117380516#:~:text=Eager%20%E6%A8%A1%E5%BC%8F%EF%BC%9APython%20%2B%20Python%20runtime%E3%80%82%20%E8%BF%99%E7%A7%8D%E6%A8%A1%E5%BC%8F%E6%98%AF%E6%9B%B4%20Pythonic%20%E7%9A%84%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F%EF%BC%8C%E5%8F%AF%E4%BB%A5%E8%AE%A9%E7%94%A8%E6%88%B7%E5%BE%88%E6%96%B9%E4%BE%BF%E7%9A%84%E4%BD%BF%E7%94%A8,eager%20%E5%B1%9E%E6%80%A7%E3%80%82%20%EF%BC%88%E4%BD%86%E6%98%AF%E6%88%91%E5%A7%8B%E7%BB%88%E5%AF%B9%E8%BF%99%E4%B8%AA%20eager%20%E6%9C%89%E7%82%B9%E5%AF%B9%E4%B8%8D%E4%B8%8A%E5%8F%B7%20T%20_%20T%EF%BC%89)
 
-One important difference between TorchScript and Python is that in TorchScript everything is typed. Important types are
+[PyTorch 源码解读之即时编译篇 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/361101354)
 
-* `bool`, `int`, `long`, `double` for numbers (int = 32 bit integer, long = 64 bit integer)
-* `Tensor` for tensors (of arbitrary shape, dtype, ...)
-* `List[T]` a list with elements of type T (one of the above)
-* Tuples are of fixed size with arbitrary but fixed element type, so e.g. `Tuple(Tensor, int)`.
-* `Optional[T]` for things that can be `None`
+video:
 
-**early binding vs late binding**
+[TorchScript and PyTorch JIT | Deep Dive - YouTube](https://www.youtube.com/watch?v=2awmrMRf0dA&ab_channel=PyTorch)
 
-Binding refers to the process of converting identifiers (such as variable and performance names) into addresses.
+[From Research to Production with PyTorch - YouTube](https://www.youtube.com/watch?v=EkELQw9tdWE&t=1244s&ab_channel=InfoQ)
 
-In python, binding takes place in runtime(late binding).
+[PyTorch From Research to Production | Nvidia GTC 2020 - YouTube](https://www.youtube.com/watch?v=2eRpeN4H2zM&ab_channel=AIPursuit)
 
-In torchScript binding takes place when compile(early binding),
+document:
 
-[Early binding and Late binding in C++ - GeeksforGeeks](https://www.geeksforgeeks.org/early-binding-late-binding-c/)
+[TorchScript Language Reference — PyTorch 1.11.0 documentation](https://pytorch.org/docs/stable/jit_language_reference.html#language-reference)
 
+[TorchScript — PyTorch 1.11.0 documentation](https://pytorch.org/docs/stable/jit.html)
 
-# JIT workflow(high level)
+## Note
 
-* tracing to graph
-* Then there are a number of compiler passes through the graph to go from `.graph` to an optimized graph (that can be retrieved with `.graph_for(*inputs)`.
-* Finally, the `.graph` is compiled to a from of bytecode that is then executed by a virtual machine. We might hope to not meet the bytecode too often, but clearly we want this part to be fast, too. This maintains the operands on a stack and then dispatches to the various operators registered by LibTorch or the *custom operators* that extend the JIT.
+[TorchScript](Note/TorchScript.md)
 
-
-## Optimization passes
-
-* Eliminating dead code and common subexpressions, pre-computing things that only involve constants,
-  * dead code is code which can never be executed at run-time
-* Pooling redundant constants into single values, and some simple "pattern matching" optimizations (like eliminating `.t().t()`),
-* Unrolling small loops and batching matrix multiplications that result from unrolling loops.
-
-
-## Optimization on python
-
-### How PyTorch programs spend their time
-
-At a very high level, you can divide time spent into these parts:
-
-* Python program flow,
-* Data "administrative overhead" (creating `Tensor` data structures, autograd `Node`s etc.),
-* Data aquisition (I/O),
-* Computation roughly as
-  * fixed overhead (kernel launches etc.),
-  * reading / writing memory,
-  * "real computation".
+[Nvfuser](Note/nvFuser.md)
