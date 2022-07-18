@@ -1,5 +1,6 @@
 {
     "python.defaultInterpreterPath": "/home/scratch.jiahuil_gpu/anaconda3/bin/python",
+    "python.analysis.extraPaths": ["/home/scratch.jiahuil_gpu/anaconda3/lib/site-packages"],
     "editor.bracketPairColorization.enabled": true,
     "editor.guides.bracketPairs":"active",
 }

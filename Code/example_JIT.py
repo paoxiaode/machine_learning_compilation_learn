@@ -10,7 +10,7 @@ def lunif(x, t=2): # copied from the paper
     sq_pdist = torch.pdist(x, p=2).pow(2)
     return sq_pdist.mul(-t).exp().mean().log()
     
-
+@torch.jit.script
 def fn(x):
     for _ in range(x.dim()):
         x = x * x
@@ -54,13 +54,14 @@ def main():
     print(scripted_model.code)
 
     scripted_fn = torch.jit.script(fn)
+    print(type(scripted_fn))
     print(scripted_fn.graph)
     print(scripted_fn.code)
     
     # t = torch.tensor([1,2])
     # print(t.tolist)
     
-
+    
 
     # x = torch.randn(1024, 128, device="cuda")
     # x /= x.norm(p=2, dim=1, keepdim=True).requires_grad_()

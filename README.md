@@ -1,8 +1,17 @@
-# Pytorch Script
+# 机器学习编译 machine learning compilation
+## MLC course 
+https://mlc.ai/summer22-zh/
+
+### Self course note:
+
+[Overview of ML Compilation](Note/mlc_1_intro.md)
+
+
+## Pytorch Script
 
 TorchScript is a language implemented by the PyTorch JIT ("Just in Time compiler")
 
-## Reference
+### Reference
 
 web:
 
