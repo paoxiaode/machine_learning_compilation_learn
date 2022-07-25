@@ -1,0 +1,6 @@
+[submodule "Code/Code/mlc"]
+	path = Code/Code/mlc
+	url = https://github.com/mlc-ai/notebooks.git
+[submodule "Code/mlc"]
+	path = Code/mlc
+	url = https://github.com/mlc-ai/notebooks.git
