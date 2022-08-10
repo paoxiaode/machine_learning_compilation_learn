@@ -1,4 +1,3 @@
 [submodule "Code/mlc"]
 	path = Code/mlc
 	url = https://github.com/mlc-ai/notebooks.git
-	branch = main
